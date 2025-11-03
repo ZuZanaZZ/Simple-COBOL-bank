@@ -16,12 +16,12 @@
 
        PROCEDURE DIVISION.
       *> Initial set up and information display.
-           DISPLAY "Please enter your name.".
+           DISPLAY "Please enter your name:".
            ACCEPT ClientName.
-           DISPLAY "Client name:" ClientName.
-           DISPLAY "Client funds:" ClientFunds.
-           DISPLAY "Bank name:" BankName.
-           DISPLAY "Bank funds:" BankFunds.
+           DISPLAY "Client name: " ClientName.
+           DISPLAY "Client funds: " ClientFunds.
+           DISPLAY "Bank name: " BankName.
+           DISPLAY "Bank funds: " BankFunds.
 
       *> Transaction
            DISPLAY "Client transfers 10 coins to the bank".
@@ -30,8 +30,8 @@
 
       *> Displaying information about the transaction.     
            DISPLAY "Transaction was successful.".
-           DISPLAY "Client funds:" ClientFunds.
-           DISPLAY "Bank funds:" BankFunds.
+           DISPLAY "Client funds: " ClientFunds.
+           DISPLAY "Bank funds: " BankFunds.
 
            STOP RUN.
        END PROGRAM BANK.
