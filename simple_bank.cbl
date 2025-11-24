@@ -71,24 +71,53 @@
            DISPLAY "Select client by number."
            DISPLAY "Available clients:"
            PERFORM DisplayClientsProcedure
+           DISPLAY "Or add a new client by pressing ""0"""
            ACCEPT SelectedClient
        
-           MOVE SelectedClient TO CIndex
-           DISPLAY "You Selected: " 
-           DISPLAY ClientNames(CIndex) " " ClientSurnames(CIndex)
-           DISPLAY "You have " ClientFunds(CIndex) " coins in account.".
+           IF SelectedClient = 0 THEN
+               PERFORM AddNewClientProcecure
+               DISPLAY "Added a new client."
+           ELSE
+               MOVE SelectedClient TO CIndex
+               DISPLAY "You Selected: " 
+               DISPLAY ClientNames(CIndex) " " ClientSurnames(CIndex)
+               DISPLAY "You have " ClientFunds(CIndex) " coins."
+           END-IF.
 
        DisplayClientsProcedure.
       * Displays available clients
            PERFORM DisplayClientProcedure UNTIL CLoop=CIndex.
 
        DisplayClientProcedure.
+      * Displays 1 client 
            DISPLAY CLoop":" ClientNames(CLoop) " " ClientSurnames(CLoop)
            ADD 1 TO CLoop.
+       
+       AddNewClientProcecure.
+      * Adds new client to the file
+      * Writing to file: https://codesignal.com/learn/courses/cobol-file-handling/lessons/creating-and-writing-to-a-sequential-file
+           DISPLAY "Enter 4 character name:"
+           ACCEPT ClientName
+           DISPLAY "Enter 3 character surname:"
+           ACCEPT ClientSurname
+           DISPLAY "Enter 8 character alphanumeric ID:"
+           ACCEPT ClientID
+           DISPLAY "Enter your funds:"
+           ACCEPT ClientFund
+
+           OPEN EXTEND Client
+           WRITE CRecord
+           CLOSE Client
+
+           MOVE ClientName TO ClientNames(CIndex)
+           MOVE ClientSurname TO ClientSurnames(CIndex)
+           MOVE ClientID TO ClientIDs(CIndex)
+           MOVE ClientFund TO ClientFunds(CIndex).
 
        MakeTransactionProcedure.
       * Setting up the transaction.
-           DISPLAY "How much would you like to transfer to your bank?".
+           DISPLAY "You have " ClientFunds(CIndex) " coins."
+           DISPLAY "How much would you like to transfer to your bank?"
            ACCEPT TransactionTotal
 
       * Checking if client has enough funds.
