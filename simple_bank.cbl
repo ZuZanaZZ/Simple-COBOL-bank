@@ -32,6 +32,7 @@
       * File handling https://www.geeksforgeeks.org/cobol/file-handling-in-cobol/
        01 EndOfFile            PIC X(3) VALUE "NO".
        01 CIndex               PIC 9(2) VALUE 1.
+       01 CLoop                PIC 9(2) VALUE 1.
        01 SelectedClient       PIC 9(2).
        01 ClientTable.
            03 ClientEntry OCCURS 10 TIMES.
@@ -67,14 +68,23 @@
            END-READ.
 
        SelectClientProcedure.
-           DISPLAY "Select client number (1 or 2): "
+           DISPLAY "Select client by number."
+           DISPLAY "Available clients:"
+           PERFORM DisplayClientsProcedure
            ACCEPT SelectedClient
        
            MOVE SelectedClient TO CIndex
            DISPLAY "You Selected: " 
            DISPLAY ClientNames(CIndex) " " ClientSurnames(CIndex)
-           DISPLAY "You have " ClientFunds(CIndex)
-           DISPLAY "coins in your account.".
+           DISPLAY "You have " ClientFunds(CIndex) " coins in account.".
+
+       DisplayClientsProcedure.
+      * Displays available clients
+           PERFORM DisplayClientProcedure UNTIL CLoop=CIndex.
+
+       DisplayClientProcedure.
+           DISPLAY CLoop":" ClientNames(CLoop) " " ClientSurnames(CLoop)
+           ADD 1 TO CLoop.
 
        MakeTransactionProcedure.
       * Setting up the transaction.
@@ -82,7 +92,7 @@
            ACCEPT TransactionTotal
 
       * Checking if client has enough funds.
-           IF ClientFunds(CIndex) > TransactionTotal THEN
+           IF ClientFunds(CIndex) >= TransactionTotal THEN
       *    Transaction was successful
                   DISPLAY "Client transfers " TransactionTotal
                   DISPLAY "coins to the bank"
