@@ -71,7 +71,6 @@
            DISPLAY "Select client by number."
            DISPLAY "Available clients:"
            CALL "DisplayClients" USING CLoop, CIndex, ClientTable.
-      *     PERFORM DisplayClientsProcedure
            DISPLAY "Or add a new client by pressing ""0"""
            ACCEPT SelectedClient
        
@@ -84,15 +83,6 @@
                DISPLAY ClientNames(CIndex) " " ClientSurnames(CIndex)
                DISPLAY "You have " ClientFunds(CIndex) " coins."
            END-IF.
-
-      * DisplayClientsProcedure.
-      * Displays available clients
-      *     PERFORM DisplayClientProcedure UNTIL CLoop=CIndex.
-
-      * DisplayClientProcedure.
-      * Displays 1 client 
-      *     DISPLAY CLoop":" ClientNames(CLoop) " " ClientSurnames(CLoop)
-      *     ADD 1 TO CLoop.
        
        AddNewClientProcecure.
       * Adds new client to the file

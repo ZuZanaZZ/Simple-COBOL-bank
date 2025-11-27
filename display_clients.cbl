@@ -12,11 +12,13 @@
                05 L-ClientIDs         PIC X(8).
                05 L-ClientFunds       PIC 9(3).
 
+      * Subprograms: https://www.ibmmainframer.com/cobol-tutorial/cobol-call-statement-example/
        PROCEDURE DIVISION USING L-CLoop, L-CIndex, L-ClientTable.
        PERFORM DisplayClientsProcedure.
        EXIT PROGRAM.
 
        DisplayClientsProcedure.
+      * Displays available clients
            PERFORM DisplayClientProcedure UNTIL L-CLoop=L-CIndex.
 
        DisplayClientProcedure.
