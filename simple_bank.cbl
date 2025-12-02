@@ -14,20 +14,20 @@
        FILE SECTION.
        FD Client.
        01 CRecord.
-           03 ClientName       PIC A(4).
+           03 ClientName       PIC A(16).
            03 Filler           PIC X(1).
-           03 ClientSurname    PIC A(3).
+           03 ClientSurname    PIC A(16).
            03 Filler           PIC X(1).
            03 ClientID         PIC X(8).
            03 Filler           PIC X(1).
-           03 ClientFund       PIC 9(3).
+           03 ClientFund       PIC 9(16).
 
        WORKING-STORAGE SECTION.
        01 BankInfo.
            03 BankName         PIC A(30) VALUE "BankX".
-           03 BankFund         PIC 9(20) VALUE 10000000.
-       01 TransactionInfo.
-           03 TransactionTotal PIC 9(20).
+           03 BankFund         PIC 9(16) VALUE 10000000.
+       01 TrInfo.
+           03 TrTotal          PIC 9(16).
 
       * File handling https://www.geeksforgeeks.org/cobol/file-handling-in-cobol/
        01 EndOfFile            PIC X(3) VALUE "NO".
@@ -36,16 +36,18 @@
        01 SelectedClient       PIC 9(2).
        01 ClientTable.
            03 ClientEntry OCCURS 10 TIMES.
-               05 ClientNames       PIC A(4).
-               05 ClientSurnames    PIC A(3).
+               05 ClientNames       PIC A(16).
+               05 ClientSurnames    PIC A(16).
                05 ClientIDs         PIC X(8).
-               05 ClientFunds       PIC 9(3).
+               05 ClientFunds       PIC 9(16).
 
        PROCEDURE DIVISION.
       * Main Procedure
            PERFORM LoadClientsProcedure
            PERFORM SelectClientProcedure
-           PERFORM MakeTransactionProcedure.
+           CALL "MakeTransaction" USING BankInfo, TrInfo,
+      -        CIndex, ClientTable.
+           STOP RUN.
 
        LoadClientsProcedure.
            OPEN INPUT Client
@@ -81,7 +83,6 @@
                MOVE SelectedClient TO CIndex
                DISPLAY "You Selected: " 
                DISPLAY ClientNames(CIndex) " " ClientSurnames(CIndex)
-               DISPLAY "You have " ClientFunds(CIndex) " coins."
            END-IF.
        
        AddNewClientProcecure.
@@ -104,31 +105,5 @@
            MOVE ClientSurname TO ClientSurnames(CIndex)
            MOVE ClientID TO ClientIDs(CIndex)
            MOVE ClientFund TO ClientFunds(CIndex).
-
-       MakeTransactionProcedure.
-      * Setting up the transaction.
-           DISPLAY "You have " ClientFunds(CIndex) " coins."
-           DISPLAY "How much would you like to transfer to your bank?"
-           ACCEPT TransactionTotal
-
-      * Checking if client has enough funds.
-           IF ClientFunds(CIndex) >= TransactionTotal THEN
-      *    Transaction was successful
-                  DISPLAY "Client transfers " TransactionTotal
-                  DISPLAY "coins to the bank"
-                  SUBTRACT TransactionTotal FROM ClientFunds(CIndex)
-                  ADD TransactionTotal TO BankFund
-
-      *    Displaying information about the transaction.     
-                  DISPLAY "Transaction was successful."
-                  DISPLAY "Client funds: " ClientFunds(CIndex)
-                  DISPLAY "Bank funds: " BankFund
-
-      *    Transaction was unsuccessful due to lack of funds.
-           ELSE
-               DISPLAY "Transaction was unsuccessful."
-               DISPLAY "You do not have enough funds."
-           END-IF.
-
-           STOP RUN.
+       
        END PROGRAM SimpleBank.
