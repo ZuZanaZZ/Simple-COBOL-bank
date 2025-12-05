@@ -88,9 +88,9 @@
        AddNewClientProcecure.
       * Adds new client to the file
       * Writing to file: https://codesignal.com/learn/courses/cobol-file-handling/lessons/creating-and-writing-to-a-sequential-file
-           DISPLAY "Enter 4 character name:"
+           DISPLAY "Enter character name:"
            ACCEPT ClientName
-           DISPLAY "Enter 3 character surname:"
+           DISPLAY "Enter character surname:"
            ACCEPT ClientSurname
            DISPLAY "Enter 8 character alphanumeric ID:"
            ACCEPT ClientID
